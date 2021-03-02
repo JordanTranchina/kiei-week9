@@ -16,6 +16,7 @@ exports.handler = async function (event) {
 
   if (numberOfLikes == 0) {
     await db.collection("likes").add({
+      w
       postId: postId,
       userId: userId
     })

@@ -19,12 +19,16 @@ exports.handler = async function (event) {
     created: createdTimestamp
   }
 
+  // pushing and defining the new post from the database at same time 
   let newPost = await db.collection("posts").add(post)
   console.log(newPost);
+  // asking newPost what it's id is
   console.log(newPost.id);
 
   // send id to firestore
   post.id = newPost.id
+
+  // code that updates firebase??
 
   // 🔥🔥🔥 Lab
   // Step 2: Parse out the post data, i.e. the event.body – pull out 
