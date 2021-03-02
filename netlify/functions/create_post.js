@@ -1,9 +1,31 @@
 // /.netlify/functions/create_post
 let firebase = require('./firebase')
 
-exports.handler = async function(event) {
+exports.handler = async function (event) {
   let db = firebase.firestore()
-  
+  let body = JSON.parse(event.body)
+  let currentUserId = body.currentUserId
+  let postUsername = body.postUsername
+  let postImageUrl = body.postImageUrl
+  let createdTimestamp = firebase.firestore.FieldValue.serverTimestamp()
+
+  console.log(`currentUserId is ${currentUserId}`);
+  console.log(`postUsername is ${postUsername}`);
+  console.log(`postImageUrl is ${postImageUrl}`);
+  let post = {
+    userId: currentUserId,
+    username: postUsername,
+    imageUrl: postImageUrl,
+    created: createdTimestamp
+  }
+
+  let newPost = await db.collection("posts").add(post)
+  console.log(newPost);
+  console.log(newPost.id);
+
+  // send id to firestore
+  post.id = newPost.id
+
   // 🔥🔥🔥 Lab
   // Step 2: Parse out the post data, i.e. the event.body – pull out 
   //         the user ID, username, and image URL that is provided
@@ -21,7 +43,7 @@ exports.handler = async function(event) {
 
   return {
     statusCode: 200,
-    body: JSON.stringify({})
+    body: JSON.stringify(post)
   }
 
 }
